@@ -13,15 +13,17 @@ describe('Suite de testes CRUD da API de conteúdos', () => {
 
     console.log(payload_conteudo);
     
-    it('CT01 - Cadastro de conteúdo e retorno 201', async () => {
+    it('CT01 - Cadastrar conteúdo e retornar 201', async () => {
         const response = await request(rotaConteudo)
             .post('/conteudos')
             .send(payload_conteudo);
 
-        console.log(response.body);
+        console.log('Conteúdo adicionado: ', response.body);
 
         //validating received values
         const{id, titulo, descricao, tipoConteudo, conteudo, dataCadastro} = response.body;
+        idConteudo = response.body.id;
+        dataCadastroConteudo = response.body.dataCadastro;
 
         //validating status code
         expect(response.status).toBe(201);
@@ -35,8 +37,27 @@ describe('Suite de testes CRUD da API de conteúdos', () => {
         expect(descricao).toBe(payload_conteudo.descricao);
         expect(tipoConteudo).toBe(payload_conteudo.tipoConteudo);
         expect(conteudo).toBe(payload_conteudo.conteudo);
-        
-
     })
+
+    it('CT02 - Buscar conteúdo e retornar 200', async () => {
+        const response = await request(rotaConteudo)
+            .get(`/conteudos/${idConteudo}`);
+
+        console.log('Conteúdo retornado: ', response.body)
+
+        //validating status code
+        expect(response.status).toBe(200);
+
+        //validating received values
+        const{id, titulo, descricao, tipoConteudo, conteudo, dataCadastro} = response.body;
+        
+        //validating sent vs received value
+        expect(id).toBe(idConteudo);
+        expect(titulo).toBe(payload_conteudo.titulo);
+        expect(descricao).toBe(payload_conteudo.descricao);
+        expect(tipoConteudo).toBe(payload_conteudo.tipoConteudo);
+        expect(conteudo).toBe(payload_conteudo.conteudo);
+        expect(dataCadastro).toBe(dataCadastroConteudo);
+    });
     
 }) 
