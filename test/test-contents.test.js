@@ -59,5 +59,31 @@ describe('Suite de testes CRUD da API de conteúdos', () => {
         expect(conteudo).toBe(payload_conteudo.conteudo);
         expect(dataCadastro).toBe(dataCadastroConteudo);
     });
+
+    it('CT03 - Atualizar conteúdo e retornar 201', async () => {
+        
+        const updateConteudo_payload = Object.assign({}, payload_conteudo, {
+            ['titulo']: 'Raças de Felinos' 
+        });
+        
+        const response = await request(rotaConteudo)
+            .put(`/conteudos/${idConteudo}`)
+            .send(updateConteudo_payload);
+
+        console.log('Conteúdo retornado: ', response.body)
+
+        //validating status code
+        expect(response.status).toBe(201);
+
+        //validating received values
+        const{id, titulo, descricao, tipoConteudo, conteudo} = response.body;
+        
+        //validating sent vs received value
+        expect(id).toBe(idConteudo);
+        expect(titulo).toBe(updateConteudo_payload.titulo);
+        expect(descricao).toBe(updateConteudo_payload.descricao);
+        expect(tipoConteudo).toBe(updateConteudo_payload.tipoConteudo);
+        expect(conteudo).toBe(updateConteudo_payload.conteudo);
+    });
     
 }) 
