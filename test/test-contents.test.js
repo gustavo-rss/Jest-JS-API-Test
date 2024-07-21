@@ -86,4 +86,16 @@ describe('Suite de testes CRUD da API de conteúdos', () => {
         expect(conteudo).toBe(updateConteudo_payload.conteudo);
     });
     
+    it('CT04 - Remover conteúdo e retornar 200', async () => {
+        const response = await request(rotaConteudo)
+            .delete(`/conteudos/${idConteudo}`);
+
+        console.log('Conteúdo retornado: ', response.body)
+
+        //validating status code
+        expect(response.status).toBe(200);
+
+        //validating received values
+        expect(response.body).toHaveProperty('message', "O conteúdo foi removido com sucesso!");
+    });
 }) 
